@@ -34,12 +34,9 @@ class ViewController: UIViewController {
         var billAmount = (billField.text as NSString).doubleValue
         var tip = billAmount * tipPercentage
         var total = billAmount + tip
-        tipLabel.text = "$\(tip)"
-        totalLabel.text = "$\(total)"
         
         tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", tip)
-
+        totalLabel.text = String(format: "$%.2f", total)
     }
 
     @IBOutlet var onTap: UITapGestureRecognizer!
