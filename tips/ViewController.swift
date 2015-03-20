@@ -28,9 +28,9 @@ class ViewController: UIViewController {
         
         // If there is a default tip set, clear the selectedSegmentIndex, else set it to 1
         var defaults = NSUserDefaults.standardUserDefaults()
-        var default_tip_percentage = defaults.objectForKey("default_tip_percentage")
+        //var default_tip_percentage = defaults.objectForKey("default_tip_percentage")
         
-        if default_tip_percentage != nil {
+        if let default_tip_percentage = defaults.objectForKey("default_tip_percentage") as String? {
             tipControl.selectedSegmentIndex = -1; //turn off the current selection
         } else {
             tipControl.selectedSegmentIndex = 1; //select middle by default
@@ -45,8 +45,6 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        
         // Check last time saved a bill amount and load the values if needed
         var defaults = NSUserDefaults.standardUserDefaults()
         var last_date:NSDate? = defaults.objectForKey("last_time") as NSDate?
@@ -54,11 +52,12 @@ class ViewController: UIViewController {
         
         let current_time:NSDate = NSDate()
         
-        if (last_date != nil) {
-            if current_time.timeIntervalSinceDate(last_date!) < 10 * 60 {
+        if let last_date = defaults.objectForKey("last_time") as NSDate? {
+            if current_time.timeIntervalSinceDate(last_date) < 10 * 60 {
                 billField.text = last_bill_amount
             }
         }
+        updateTip()
         println("view will appear")
     }
     
@@ -82,19 +81,13 @@ class ViewController: UIViewController {
         
         println("view did disappear")
     }
-
-
-
-    @IBAction func onEditingChanged(sender: AnyObject) {
-        
-        
-        // Check if there is a default tip value
+    
+    func updateTip() {
         var defaults = NSUserDefaults.standardUserDefaults()
-        var default_tip_percentage = defaults.objectForKey("default_tip_percentage")
         
         var tipPercentage:Double = -1
         // Compute default tip percentage if its entry exists
-        if default_tip_percentage != nil {
+        if let default_tip_percentage = defaults.objectForKey("default_tip_percentage") as String? {
             tipPercentage = ((default_tip_percentage as NSString).doubleValue)/100
         }
         
@@ -115,6 +108,13 @@ class ViewController: UIViewController {
         // Initialize values to 0.
         tipLabel.text = formatter.stringFromNumber(tip)
         totalLabel.text = formatter.stringFromNumber(total)
+    }
+
+
+
+    @IBAction func onEditingChanged(sender: AnyObject) {
+        // Check if there is a default tip value
+        updateTip()
     }
 
     @IBOutlet var onTap: UITapGestureRecognizer!

@@ -17,8 +17,7 @@ class SettingsViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         var defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.objectForKey("default_tip_percentage") != nil {
-            var default_tip_percentage = defaults.objectForKey("default_tip_percentage") as String
+        if let default_tip_percentage = defaults.objectForKey("default_tip_percentage") as String? {
             defaultTip.text = "\(default_tip_percentage)"
         } else {
             defaultTip.text = ""
