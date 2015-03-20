@@ -45,6 +45,20 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        
+        // Check last time saved a bill amount and load the values if needed
+        var defaults = NSUserDefaults.standardUserDefaults()
+        var last_date:NSDate? = defaults.objectForKey("last_time") as NSDate?
+        var last_bill_amount:String? = defaults.objectForKey("last_bill_amount") as String?
+        
+        let current_time:NSDate = NSDate()
+        
+        if (last_date != nil) {
+            if current_time.timeIntervalSinceDate(last_date!) < 10 * 60 {
+                billField.text = last_bill_amount
+            }
+        }
         println("view will appear")
     }
     
@@ -60,6 +74,12 @@ class ViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
+        // store time when last disappeared
+        var defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(NSDate(), forKey: "last_time")
+        defaults.setObject(billField.text, forKey: "last_bill_amount")
+        defaults.synchronize()
+        
         println("view did disappear")
     }
 
